@@ -49,6 +49,8 @@ app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
 
 const router = express.Router();
 
+
+
 router.use(ApiRoutes);
 
 app.use(router);

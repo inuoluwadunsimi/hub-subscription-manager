@@ -1,0 +1,83 @@
+openapi: 3.0.0
+info:
+  title: Opolo hub subscription manager
+  version: 1.0.0
+  description: Api docs for managing subscriptions for opolo hub
+paths:
+  /user/auth/google-auth:
+    post:
+      summary: 'endpoint for google auth'
+      tags:
+        - Authentication
+      operationId: AuthWithGoogle
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/GoogleAuthSchema'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        400:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+
+
+
+components:
+  parameters:
+    DeviceID:
+      name: x-device-id
+      in: header
+      schema:
+        type: string
+      required: true
+    AuthToken:
+      name: x-auth-token
+      in: header
+      schema:
+        type: string
+      required: true
+  schemas:
+    GoogleAuthSchema:
+      type: object
+      properties:
+        email:
+          type: string
+        googleToken:
+          type: string
+        role:
+          type: string
+          enum:
+            - user
+            - admin
+    TokenResponse:
+      title: TokenResponse
+      type: object
+      properties:
+        token:
+          type: string
+
+    ErrorResponse:
+      title: DefaultResponse
+      type: object
+      properties:
+        error:
+          type: string
+        message:
+          type: string
+      required:
+        - message
+

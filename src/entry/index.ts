@@ -4,6 +4,7 @@ import errorHandler from 'errorhandler'
 import app from '../app';
 import { connectMongo } from '../helpers/mongodb.connector';
 import { connectRedis } from '../helpers/redis.connector';
+import {createAdminUser} from "../services";
 
 app.use(errorHandler());
 
@@ -12,6 +13,7 @@ app.use(errorHandler());
   const server = app.listen(process.env.APP_PORT || 8000, () => {
     connectMongo();
     connectRedis();
+    createAdminUser()
   });
 
   // Nodemon dev hack

@@ -1,1 +1,1 @@
-export * from './triangleService';
+export * from './admin.service';

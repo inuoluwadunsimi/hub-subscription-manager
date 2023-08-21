@@ -1,4 +1,4 @@
-import { CustomError } from '../helpers';
+import { CustomError } from '../../helpers';
 
 type errorData = string | object;
 
