@@ -30,8 +30,33 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-
-
+  /admin/add-user:
+    post:
+      summary: 'endpoint to add a new user'
+      tags:
+        - Authentication
+        - Admin
+      operationId: addUser
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AdminAddUser'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
 
 
@@ -80,4 +105,20 @@ components:
           type: string
       required:
         - message
+
+    DefaultResponse:
+      title: DefaultResponse
+      type: object
+      properties:
+        message:
+          type: string
+      required:
+        - message
+
+    AdminAddUser:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
 

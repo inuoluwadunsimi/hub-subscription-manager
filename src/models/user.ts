@@ -18,7 +18,7 @@ const UserSchema = new Schema<User>({
     },
     fullName: {
         type: String,
-        required: true
+        // required: true
     },
 }, {
     toObject: {

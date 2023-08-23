@@ -26,9 +26,12 @@ export const config = {
       uri: <string>process.env.REDIS_URI
     },
     admin:{
-        email:'oauhub@opolo.global',
+        email:'danielolaoladeinde@gmail.com',
         fullName: 'Opolo Innovation global',
 
-    }
+    },
+    mailing: {
+        gmail_pass: <string>process.env["GMAIL_PASS"]
+    },
   };
   

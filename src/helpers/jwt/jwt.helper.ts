@@ -75,7 +75,12 @@ export class JwtHelper {
 
     requirePermission(roleType: JwtType) {
         return async (req: IExpressRequest, res: Response, next: Function) => {
-            const token = req.headers['x-auth-token'];
+            let token = ''
+            if(roleType === JwtType.ADMIN_USER) {
+                token = req.cookies['x-auth-token'];
+            }else if(roleType === JwtType.NEW_USER || JwtType.USER){
+                token = <string> req.headers['x-auth-token']
+            }
 
 
             // if ((typeof token !== 'string') && roleType === JwtType.GUEST_OR_USER) {

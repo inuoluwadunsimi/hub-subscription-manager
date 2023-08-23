@@ -16,3 +16,8 @@ export enum AuthType {
     EMAIL = 'email',
     GOOGLE = 'google',
 }
+
+export enum UserType{
+    ADMIN = 'admin',
+    USER = 'user'
+}

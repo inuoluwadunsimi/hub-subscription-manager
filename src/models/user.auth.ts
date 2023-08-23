@@ -9,7 +9,6 @@ import {AuthType} from "../interfaces";
 export enum userRole {
     USER = 'user',
     ADMIN = 'admin',
-    RIDER = 'rider'
 }
 
 const userAuth = new Schema<UserAuth>(
