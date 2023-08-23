@@ -1,8 +1,6 @@
-# node-js express typescript boilerplate
+# Hub subscription manager
 
-A simple boiler plate to use to jump start a nodejs project with support for
 
-- mongoose and mongodb
-- openAPI API documentation
-- redis connection
-- error handling functions
+
+A nodejs app to manage and track subscriptions for a workspace.
+
