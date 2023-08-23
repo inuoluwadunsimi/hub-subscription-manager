@@ -86,7 +86,7 @@ export async function userGoogleAuth(data:UserGoogleAuth):Promise<SignUpResponse
 
     return {
         token: accessToken,
-        user: savedUser as unknown as User,
+        user: user as unknown as User,
     };
 
 
