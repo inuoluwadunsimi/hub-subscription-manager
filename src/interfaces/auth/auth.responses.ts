@@ -1,7 +1,8 @@
 
 import {User} from "../models/user";
 
-export interface SignUpResponse {
+export interface AuthResponse {
     token: string;
     user: User;
 }
+

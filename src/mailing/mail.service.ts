@@ -23,6 +23,7 @@ export const Mailer = {
             to: email,
             from: this.sender,
             subject: 'GLOUSE SIGNUP: VERIFY YOUR EMAIL',
+            // email will be appended as a path param to the client so the client can extract it when sending signup request
             html: `<p> Welcome, signup by using this link ${this.link}/signup/:${email}</p>`
 
         })
@@ -32,8 +33,8 @@ export const Mailer = {
         await transporter.sendMail({
             to: email,
             from: this.sender,
-            subject: 'WELCOME TO A WORLD OF CONVENIENCE',
-            html: `<p> Welcome to glouse, when you go order?<p/>`
+            subject: 'WELCOME TO OPOLO GLOBAL',
+            html: `<p> Thanks for joining opolo global, an admin will contact you with further steps<p/>`
         })
     },
     sendVerifyDeviceOtp: async function (email: string, otp: string) {
