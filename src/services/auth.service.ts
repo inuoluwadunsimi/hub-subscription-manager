@@ -12,7 +12,7 @@ import {
 import {JwtHelper} from "../helpers/jwt/jwt.helper";
 import {redisClient} from "../helpers/redis.connector";
 import {config} from "../constants/settings";
-import {LoginRequest, SignupWithEmail, UserGoogleAuth, VeifyDeviceRequest} from "../interfaces/auth/auth-requests";
+import {LoginRequest, SignupWithEmail, UserGoogleAuth, VeifyDeviceRequest,ForgotPasswordOtpRequest,ForgotPasswordOtpVerifyRequest,ResetPasswordRequest} from "../interfaces/auth/auth-requests";
 import {AuthResponse} from "../interfaces/auth/auth.responses";
 import {verifyGoogleToken} from "../helpers/google.helper";
 import bcrypt from 'bcrypt'
@@ -265,3 +265,114 @@ export async function verifyDevice(data:VeifyDeviceRequest):Promise<AuthResponse
     }
 
 }
+
+export async function sendForgotPasswordOtp(body: ForgotPasswordOtpRequest): Promise<void> {
+    let {email} = body;
+    const {deviceId} = body;
+    email = email.toLowerCase();
+
+    const existingAuth = await UserDb.findOne({email});
+    if (!existingAuth) {
+        throw new BadRequestError('user with this email does not exist');
+    }
+
+    // generate otp
+
+
+    const existingVerification = await UserVerDb.findOne({
+        email,
+        deviceId,
+        createdAt: {$gte: Date.now() - 60000},
+    });
+
+    if (existingVerification) {
+        throw new BadRequestError('OTP has been sent within the minute.');
+    }
+
+    const otp = generateOtp();
+
+
+    const newVer = new UserVerDb({
+        email,
+        otp,
+        deviceId,
+        type: OtpType.FORGOT_PASSWORD,
+    });
+
+
+    await newVer.save();
+    await Mailer.sendForgotPasswordOtp(email, otp)
+
+    // send an email containing the otp
+}
+
+
+
+export async function verifyForgotPasswordOtpRequest(body: ForgotPasswordOtpVerifyRequest): Promise<String> {
+    let {email} = body;
+    email = email.toLowerCase();
+    const {otp, deviceId} = body;
+
+    const verDb = await UserVerDb.findOne({
+        email,
+        otp,
+        type: OtpType.FORGOT_PASSWORD,
+        deviceId,
+    });
+
+    if (!verDb) {
+        throw new BadRequestError('Otp is invalid');
+    } else if (new Date(verDb.expiresAt) > new Date()) {
+        throw new BadRequestError('OTP has expired');
+    }
+
+    const token = jwtHelper.generateToken({
+        email,
+        deviceId,
+        type: JwtType.NEW_USER,
+    });
+
+    verDb.deleteOne();
+
+    return token;
+}
+
+
+export async function ResetPassword(body: ResetPasswordRequest): Promise<AuthResponse> {
+    let {email} = body;
+    email = email.toLowerCase();
+    const {deviceId, password} = body;
+
+    const exUser = await UserAuthDb.findOne({
+        email,
+    });
+
+    if (!exUser) {
+        throw new BadRequestError('user does not exist');
+    }
+
+
+    exUser.password = await bcrypt.hash(password, 12);
+    await exUser.save();
+    const token = jwtHelper.generateToken({
+        email,
+        deviceId,
+        type: JwtType.USER,
+    });
+    const user = await UserDb.findOne<User>({email})
+
+
+    await UserTokenDb.deleteMany({})
+    await UserTokenDb.create({
+        token,
+        email,
+        user: user?.id,
+        deviceId
+    })
+
+    return {
+        token: token,
+        user:user!
+    };
+}
+

@@ -78,11 +78,52 @@ export async function handleVerifyDevice(req:IExpressRequest,res:ExpressResponse
     }
 }
 
-export async function handleChangePassword(req:IExpressRequest,res:ExpressResponse):Promise<void>{
-    const {oldPassword,newPassword} = req.body
-    try{
+export async function handleForgotPasswordOtpRequest(req:IExpressRequest, res: ExpressResponse): Promise<void> {
+    const {email} = req.body
+    const deviceId = req.headers['x-device-id']
 
-    }catch (err){
-        ResponseManager.handleError(res,err)
+    try {
+        await authService.sendForgotPasswordOtp({
+            email,
+            deviceId: <string>deviceId,
+        });
+
+        ResponseManager.success(res, {message: 'Otp successfully sent'});
+    } catch (err) {
+        ResponseManager.handleError(res, err);
+    }
+}
+
+export async function handleVerifyForgotPasswordOtpRequest(req:IExpressRequest, res: ExpressResponse): Promise<void> {
+    const {email, otp} = req.body;
+    const deviceId = req.headers['x-device-id'];
+    try {
+        const token = await authService.verifyForgotPasswordOtpRequest({
+            email,
+            otp,
+            deviceId: <string>deviceId,
+        });
+
+        ResponseManager.success(res, {token});
+    } catch (err) {
+        ResponseManager.handleError(res, err);
+    }
+}
+
+export async function handleResetPassword(req: IExpressRequest, res: ExpressResponse): Promise<void> {
+    const email = req.email!;
+    const deviceId = req.headers['x-device-id'];
+    const {password} = req.body;
+
+    try {
+        const token = await authService.ResetPassword({
+            email,
+            deviceId: <string>deviceId,
+            password,
+        });
+
+        ResponseManager.success(res, {token});
+    } catch (err) {
+        ResponseManager.handleError(res, err);
     }
 }

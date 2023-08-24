@@ -138,7 +138,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /user/auth/change-password:
+  /user/change-password:
     post:
       summary: 'endpoint to change user password'
       tags:
@@ -147,6 +147,7 @@ paths:
       operationId: changePassword
       parameters:
         - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/DeviceID'
       requestBody:
         content:
           application/json:
@@ -165,6 +166,93 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+  /user/auth/forgotpassword/otp-request:
+    post:
+      tags:
+        - authentication
+      operationId: ForgotPasswordOtpRequest
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      summary: 'Endpoint to request top when user forgets their password'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordOtpRequest'
+      responses:
+        200:
+          description: 'Otp '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/forgotpassword/otp-verify:
+    post:
+      tags:
+        - authentication
+      operationId: ForgotPasswordOtpVerify
+      summary: 'Endpoint to verify user '
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ForgotPasswordVerifyOtpRequest'
+      responses:
+        200:
+          description: 'Successful verification,a jwt valid for one hour is sent so client can use it to reset password '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          description: 'Invalid credentials'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/auth/forgotpassword/password-reset:
+    post:
+      tags:
+        - authentication
+      operationId: PasswordReset
+      summary: 'endpoint to set new password after forgetting the old one'
+      parameters:
+        - $ref: '#/components/parameters/DeviceID'
+        - $ref: '#/components/parameters/AuthToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ResetPasswordRequest'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TokenResponse'
+        401:
+          description: 'Error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
+
+
+
 
 
 
@@ -291,6 +379,33 @@ components:
           type: string
           format: password
         newPassword:
+          type: string
+          format: password
+          pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+    ForgotPasswordOtpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+        - email
+
+    ForgotPasswordVerifyOtpRequest:
+      type: object
+      properties:
+        email:
+          type: string
+        otp:
+          type: string
+
+    ResetPasswordRequest:
+      type: object
+      required:
+        - password
+      properties:
+        password:
           type: string
           format: password
           pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'

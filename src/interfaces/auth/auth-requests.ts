@@ -24,3 +24,28 @@ export interface VeifyDeviceRequest{
     otp:string;
     trustDevice:boolean;
 }
+
+export interface ChangePasswordRequest {
+    deviceId: string;
+    oldPassword: string;
+    newPassword: string;
+    userId: string;
+
+}
+
+export interface ForgotPasswordOtpRequest {
+    email: string;
+    deviceId: string;
+}
+
+export interface ForgotPasswordOtpVerifyRequest {
+    email: string;
+    deviceId: string;
+    otp: string;
+}
+
+export interface ResetPasswordRequest {
+    email: string;
+    deviceId: string;
+    password: string;
+}
