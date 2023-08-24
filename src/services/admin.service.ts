@@ -13,6 +13,9 @@ const jwtHelper = new JwtHelper({
     redisClient: redisClient
 })
 export async function createAdminUser(){
+    /* this runs on server start to create an admin
+    * if the admin alredy exists, the server keeps running
+    * */
     try{
         const adminCreated = await UserDb.findOne<User>({email:config.admin.email})
         if(!adminCreated){
@@ -33,6 +36,10 @@ export async function createAdminUser(){
 }
 
 export async function adminGoogleSignin(body:AdmingGoogleLogin):Promise<string>{
+    /* extract the email attched to the
+    * google token and compare it to the
+    * hardcode admin email, issue a token only
+    * if they are equal */
     const {googleToken,deviceId} = body
     const {email:googleEmail} = await verifyGoogleToken(googleToken)
 
@@ -67,6 +74,9 @@ export async function adminGoogleSignin(body:AdmingGoogleLogin):Promise<string>{
 }
 
 export async function addUser(email:string):Promise<void>{
+    /* create a user with the subscriber's mail,
+    * send a mail with registration link to continue signup,
+    * throw an error if the mail already exists */
     const exUser = await UserDb.findOne<User>({email})
     if(exUser){
         throw new  BadRequestError('subscriber aleady exists')

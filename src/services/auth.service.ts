@@ -161,6 +161,10 @@ export async function emailSignup(data:SignupWithEmail):Promise<AuthResponse>{
 }
 
 export async function Login(data:LoginRequest):Promise<AuthResponse>{
+    /* compare the inputed password, throw error if they are not equal
+    if the device is not registered, throw an error and send a verification otp
+    issue a token if recognised and save to db
+    * */
     const {password,deviceId} = data
     let {email} = data
     email = email.toLowerCase()
@@ -224,6 +228,13 @@ export async function Login(data:LoginRequest):Promise<AuthResponse>{
 }
 
 export async function verifyDevice(data:VeifyDeviceRequest):Promise<AuthResponse>{
+    /** check if if the otp issues is correct and has not expired
+     * trustDevice? true: recognise the device
+     * generate a token and save it to db,
+     * delete the verification record so it cannot be reused
+     *
+     */
+
     const {otp,deviceId,trustDevice} = data
     let {email} = data
     email = email.toLowerCase()
@@ -267,6 +278,9 @@ export async function verifyDevice(data:VeifyDeviceRequest):Promise<AuthResponse
 }
 
 export async function sendForgotPasswordOtp(body: ForgotPasswordOtpRequest): Promise<void> {
+    /* generate and send otp if user exists
+    * if an otp has been sent within one minute,throw error
+    * save the otp to the db*/
     let {email} = body;
     const {deviceId} = body;
     email = email.toLowerCase();
@@ -309,6 +323,11 @@ export async function sendForgotPasswordOtp(body: ForgotPasswordOtpRequest): Pro
 
 
 export async function verifyForgotPasswordOtpRequest(body: ForgotPasswordOtpVerifyRequest): Promise<String> {
+    /* query userVerDb with otp,mail,deviceId, and type
+    * throw error if no record is found, issue shortlived token
+    * if record is found and has not expired
+    * delete userverifcation record*/
+
     let {email} = body;
     email = email.toLowerCase();
     const {otp, deviceId} = body;
@@ -339,6 +358,9 @@ export async function verifyForgotPasswordOtpRequest(body: ForgotPasswordOtpVeri
 
 
 export async function ResetPassword(body: ResetPasswordRequest): Promise<AuthResponse> {
+    /* extract email from token, hash the iinputed password
+    * update the db with the hashed password
+    * return the token and user object*/
     let {email} = body;
     email = email.toLowerCase();
     const {deviceId, password} = body;
