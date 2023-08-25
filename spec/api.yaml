@@ -30,15 +30,15 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
-  /admin/add-user:
+  /admin/users:
+    parameters:
+      - $ref: '#/components/parameters/AuthToken'
     post:
       summary: 'endpoint to add a new user'
       tags:
         - Authentication
         - Admin
       operationId: addUser
-      parameters:
-        - $ref: '#/components/parameters/AuthToken'
       requestBody:
         content:
           application/json:
@@ -57,6 +57,27 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
+    get:
+      tags:
+        - admin
+      operationId: getAllUsers
+      summary: ' endpoint to get all users'
+      responses:
+        200:
+          description: 'Success'
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        401:
+          description: 'unauthorised'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
   /user/auth/signup:
     post:
       summary: 'endpoint for user to signup with email'
@@ -249,16 +270,91 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /admin/subscription:
+    post:
+      tags:
+        - admin
+        - subscription
+      operationId: createSubscription
+      summary: 'endpoint to subscribe a user'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSubscription'
+      responses:
+        200:
+          description: 'endpoint to create subscription for a user'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
+  /admin/subscription/payment{userId}:
+    post:
+      tags:
+        - admin
+        - subscription
+      operationId: changePaymentStatus
+      summary: 'endpoint to change a subscribers payment status'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ChangePaymentStatus'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
-
-
-
-
-
-
-
-
+  /admin/subscription/status{userId}:
+      post:
+        tags:
+          - admin
+          - subscription
+        operationId: changePaymentStatus
+        summary: 'endpoint to change a subscribers payment status'
+        parameters:
+          - $ref: '#/components/parameters/AuthToken'
+          - $ref: '#/components/parameters/UserID'
+        requestBody:
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChangeSubscriptionStatus'
+        responses:
+          200:
+            description: 'success'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/DefaultResponse'
+          400:
+            description: 'error'
+            content:
+              application/json:
+                schema:
+                  $ref: '#/components/schemas/ErrorResponse'
 
 
 
@@ -267,6 +363,12 @@ paths:
 
 components:
   parameters:
+    UserID:
+      name: userId
+      in: path
+      schema:
+        type: string
+      required: true
     DeviceID:
       name: x-device-id
       in: header
@@ -409,5 +511,69 @@ components:
           type: string
           format: password
           pattern: '^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&])[A-Za-z\d@$!%*?&]{8,}$'
+
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+        email:
+          type: string
+          format: email
+        fullName:
+          type: string
+
+    CreateSubscription:
+      type: object
+      required:
+        - email
+        - schedule
+        - status
+        - paymentStatus
+      properties:
+        email:
+          type: string
+          format: email
+        startDate:
+          type: string
+        subscriptionStatus:
+          type: string
+          enum:
+            - active
+            - suspended
+            - stopped
+        paymentStatus:
+          type: string
+          enum:
+            - paid
+            - owing
+
+
+    ChangePaymentStatus:
+      type: object
+      properties:
+        paymentStatus:
+          type: string
+          enum:
+            - paid
+            - owing
+
+    ChangeSubscriptionStatus:
+      type: object
+      properties:
+        subscriptionStatus:
+          type: string
+          enum:
+            - active
+            - suspended
+            - stopped
+
+
+
+
+
+
+
 
 

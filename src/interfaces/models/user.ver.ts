@@ -20,7 +20,7 @@ export enum OtpType {
 export enum JwtType {
     NEW_USER = 'NEW_USER',
     USER = 'USER',
-    ADMIN_USER = 'TRANSACTING_USER',
+    ADMIN_USER = 'ADMIN_USER',
 }
 
 

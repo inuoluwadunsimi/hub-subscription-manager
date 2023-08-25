@@ -19,3 +19,15 @@ export async function handleAddUser(req:IExpressRequest,res:ExpressResponse):Pro
 
 
 }
+
+export async function handleGetUsers(req:IExpressRequest,res:ExpressResponse):Promise<void>{
+    try{
+
+        const users = await adminService.getUsers()
+        ResponseManager.success(res,{users})
+
+    }catch (err:any){
+        ResponseManager.handleError(res,err)
+
+    }
+}

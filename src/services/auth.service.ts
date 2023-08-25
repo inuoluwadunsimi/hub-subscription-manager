@@ -358,7 +358,7 @@ export async function verifyForgotPasswordOtpRequest(body: ForgotPasswordOtpVeri
 
 
 export async function ResetPassword(body: ResetPasswordRequest): Promise<AuthResponse> {
-    /* extract email from token, hash the iinputed password
+    /* extract email from token, hash the inputed password
     * update the db with the hashed password
     * return the token and user object*/
     let {email} = body;

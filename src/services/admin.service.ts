@@ -54,7 +54,7 @@ export async function adminGoogleSignin(body:AdmingGoogleLogin):Promise<string>{
     const token = jwtHelper.generateToken({
         email:googleEmail,
         userId: adminUser.id,
-        type: JwtType.ADMIN_USER,
+        type:JwtType.ADMIN_USER,
         deviceId
     })
 
@@ -64,7 +64,7 @@ export async function adminGoogleSignin(body:AdmingGoogleLogin):Promise<string>{
         user:adminUser.id,
         deviceId: deviceId,
 
-    })
+    },{upsert:true})
     console.log(token)
 
     return token
@@ -86,6 +86,13 @@ export async function addUser(email:string):Promise<void>{
 
     await Mailer.sendSignupMail(email)
 
+
+}
+
+export async function getUsers():Promise<User[]>{
+
+    const users = await UserDb.find<User>({})
+    return users
 
 }
 
