@@ -5,13 +5,13 @@ import {
     JwtType,
     NotFoundError,
     UnAuthorizedError,
-    User
+    User,
+    AdmingGoogleLogin, ChangePaymentStatusRequest, Subscription, ChangeSubscriptionStatusRequest
 } from "../interfaces";
 import {config} from "../constants/settings";
 import {verifyGoogleToken} from "../helpers/google.helper";
 import {JwtHelper} from "../helpers/jwt/jwt.helper";
 import {redisClient} from "../helpers/redis.connector";
-import {AdmingGoogleLogin} from "../interfaces/admin/admin-requests";
 import {Mailer} from "../mailing/mail.service";
 
 const jwtHelper = new JwtHelper({
@@ -135,3 +135,26 @@ export async function createSubscription(data:CreateSubscriptionRequest):Promise
 
 }
 
+
+export async function changePaymentStatus(data:ChangePaymentStatusRequest):Promise<void>{
+    const {userId,paymentStatus} = data
+    const userSub = await SubscriptionDb.findOne<Subscription>({user:userId})
+    if(!userSub){
+        throw new NotFoundError('no subscription record for this user')
+    }
+
+    userSub.paymentStatus = paymentStatus
+    await userSub.save()
+}
+
+
+export async function changeSubscriptionStatus(data:ChangeSubscriptionStatusRequest):Promise<void>{
+    const {userId,subscriptionStatus} = data
+    const userSub = await SubscriptionDb.findOne<Subscription>({user:userId})
+    if(!userSub){
+        throw new NotFoundError('no subscription record for this user')
+    }
+
+    userSub.subscriptionStatus = subscriptionStatus
+    await userSub.save()
+}

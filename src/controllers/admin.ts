@@ -33,8 +33,9 @@ export async function handleGetUsers(req:IExpressRequest,res:ExpressResponse):Pr
 }
 
 export async function handleCreateSubscription(req:IExpressRequest,res:ExpressResponse):Promise<void>{
+    const {email,schedule,paymentStatus,startDate,subscriptionStatus} = req.body
+
     try{
-        const {email,schedule,paymentStatus,startDate,subscriptionStatus} = req.body
 
         await adminService.createSubscription({email,schedule,paymentStatus,startDate,subscriptionStatus})
 
@@ -42,4 +43,33 @@ export async function handleCreateSubscription(req:IExpressRequest,res:ExpressRe
     }catch (err:any){
         ResponseManager.handleError(res,err)
     }
+}
+
+export async function handleChangePaymentStatus(req:IExpressRequest,res:ExpressResponse):Promise<void>{
+    const {userId} =  req.params
+    const {paymentStatus} = req.body
+    try{
+
+     await adminService.changePaymentStatus({userId,paymentStatus})
+     ResponseManager.success(res,{message:"payment status changed"})
+
+    }catch (err:any){
+        ResponseManager.handleError(res,err)
+    }
+
+}
+
+
+export async function handleChangeSubscriptionStatus(req:IExpressRequest,res:ExpressResponse):Promise<void>{
+    const {userId} =  req.params
+    const {subscriptionStatus} = req.body
+    try{
+
+        await adminService.changeSubscriptionStatus({userId,subscriptionStatus})
+        ResponseManager.success(res,{message:"subscription status changed"})
+
+    }catch (err:any){
+        ResponseManager.handleError(res,err)
+    }
+
 }

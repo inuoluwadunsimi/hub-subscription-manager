@@ -299,7 +299,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /admin/subscription/payment{userId}:
-    post:
+    put:
       tags:
         - admin
         - subscription
@@ -328,7 +328,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
 
   /admin/subscription/status{userId}:
-      post:
+      put:
         tags:
           - admin
           - subscription

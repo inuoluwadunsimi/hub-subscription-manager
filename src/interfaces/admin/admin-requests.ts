@@ -10,3 +10,13 @@ export interface CreateSubscriptionRequest{
     startDate:string;
     subscriptionStatus:string;
 }
+
+export interface ChangePaymentStatusRequest{
+    userId:string;
+    paymentStatus:string;
+}
+
+export interface ChangeSubscriptionStatusRequest{
+    userId:string;
+    subscriptionStatus:string;
+}
