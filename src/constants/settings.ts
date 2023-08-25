@@ -16,7 +16,7 @@ export const config = {
           userVerifications: 'user_verifications',
           userAuth: 'user_auths',
           subscription: 'subscription',
-
+          attendance:'attendance',
       }
     },
     google: {

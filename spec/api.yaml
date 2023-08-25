@@ -529,7 +529,7 @@ components:
       required:
         - email
         - schedule
-        - status
+        - subscriptionStatus
         - paymentStatus
       properties:
         email:
@@ -537,6 +537,12 @@ components:
           format: email
         startDate:
           type: string
+        schedule:
+          type: string
+          enum:
+            - daily
+            - weekly
+            - monthly
         subscriptionStatus:
           type: string
           enum:

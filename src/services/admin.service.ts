@@ -1,5 +1,12 @@
-import {UserAuthDb, UserDb, UserTokenDb} from "../models";
-import {BadRequestError, JwtType, NotFoundError, UnAuthorizedError, User} from "../interfaces";
+import {UserAuthDb, SubscriptionDb,UserDb, UserTokenDb} from "../models";
+import {
+    BadRequestError,
+    CreateSubscriptionRequest,
+    JwtType,
+    NotFoundError,
+    UnAuthorizedError,
+    User
+} from "../interfaces";
 import {config} from "../constants/settings";
 import {verifyGoogleToken} from "../helpers/google.helper";
 import {JwtHelper} from "../helpers/jwt/jwt.helper";
@@ -96,5 +103,35 @@ export async function getUsers():Promise<User[]>{
 
 }
 
+export async function createSubscription(data:CreateSubscriptionRequest):Promise<void>{
+    const {email,schedule,paymentStatus,startDate,subscriptionStatus} = data
 
+    const user = await UserDb.findOne<User>({email})
+    if(!user){
+        throw new NotFoundError('user has not been created')
+    }
+
+    if(!startDate){
+        await SubscriptionDb.create({
+            email,
+            fullName:user.fullName,
+            user:user.id,
+            schedule,
+            subscriptionStatus,
+            paymentStatus
+        })
+        return
+    }
+
+    await SubscriptionDb.create({
+        email,
+        fullName:user.fullName,
+        user:user.id,
+        schedule,
+        startDate,
+        subscriptionStatus,
+        paymentStatus
+    })
+
+}
 

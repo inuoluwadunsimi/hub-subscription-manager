@@ -1,27 +1,35 @@
-import * as mongoose from 'mongoose';
+import * as mongoose from "mongoose";
 import { Schema } from 'mongoose';
 import { config } from '../constants/settings';
 import { v4 as uuidv4 } from 'uuid';
-import {User} from "../interfaces";
+import {Attendance} from "../interfaces";
 
-const UserSchema = new Schema<User>({
+const AttendanceSchema = new Schema<Attendance>({
     _id: {
         type: String, default: function genUUID() {
             return uuidv4();
         }
     },
-    email: {
-        type: String,
+    user:{
+        type:String,
         required: true,
-        lowerCase: true,
-        unique:true,
-        true: true
+        ref: config.mongodb.collections.users
     },
-    fullName: {
+    date:{
+        type:Date,
+        required: true,
+        default: new Date()
+
+    },
+    clockInTime:{
         type: String,
-        // required: true
+        required:true,
     },
-}, {
+    clockOutTime:{
+        type:String,
+        required:true,
+    }
+},{
     toObject: {
         transform(doc, ret) {
             ret.id = ret._id;
@@ -37,6 +45,6 @@ const UserSchema = new Schema<User>({
         }
     },
     timestamps: true, versionKey: false
-});
+})
 
-export const UserDb = mongoose.model(config.mongodb.collections.users, UserSchema);
+export const AttendanceDb = mongoose.model(config.mongodb.collections.attendance,AttendanceSchema)
