@@ -73,3 +73,18 @@ export async function handleChangeSubscriptionStatus(req:IExpressRequest,res:Exp
     }
 
 }
+
+export async function handleEditClockIn(req:IExpressRequest,res:ExpressResponse):Promise<void>{
+    const {userId} = req.params
+    const {date,clockInTime,clockOutTime} = req.body
+
+
+    try{
+
+        await  adminService.editClockIn({userId,date,clockInTime,clockOutTime})
+        ResponseManager.success(res,{message:"successfully edited clockIn details"})
+
+    }catch (err:any){
+        ResponseManager.handleError(res,err)
+    }
+}

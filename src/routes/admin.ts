@@ -4,7 +4,7 @@ import {
     handleAddUser,
     handleChangePaymentStatus,
     handleChangeSubscriptionStatus,
-    handleCreateSubscription,
+    handleCreateSubscription, handleEditClockIn,
     handleGetUsers
 } from "../controllers";
 import {JwtHelper} from "../helpers/jwt/jwt.helper";
@@ -29,5 +29,6 @@ router.get('/users',jwtHelper.requirePermission(JwtType.ADMIN_USER),handleGetUse
 router.post('/subscription',jwtHelper.requirePermission(JwtType.ADMIN_USER),handleCreateSubscription)
 router.put('/subscription/payment/:userId',jwtHelper.requirePermission(JwtType.ADMIN_USER),handleChangePaymentStatus)
 router.put('/subscription/status/:userId',jwtHelper.requirePermission(JwtType.ADMIN_USER),handleChangeSubscriptionStatus)
+router.put('/attendance/:userId',jwtHelper.requirePermission(JwtType.ADMIN_USER),handleEditClockIn)
 
 export default router;

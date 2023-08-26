@@ -20,3 +20,10 @@ export interface ChangeSubscriptionStatusRequest{
     userId:string;
     subscriptionStatus:string;
 }
+
+export interface EditClockInRequest{
+    userId:string;
+    date:string;
+    clockInTime:string;
+    clockOutTime:string;
+}

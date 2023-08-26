@@ -425,6 +425,36 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
+  /admin/attendance/{userId}:
+    put:
+      tags:
+        - admin
+        - subscription
+      operationId: editClockIndays
+      summary: 'endpoint for admin to edit clock-in day'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/UserID'
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EditClockIn'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+
 
 
 
@@ -671,6 +701,19 @@ components:
             - active
             - suspended
             - stopped
+
+    EditClockIn:
+      type: object
+      properties:
+        date:
+          type: string
+          format: date-time
+        clockInTime:
+          type: string
+        clockOutTime:
+          type: string
+
+
 
 
 

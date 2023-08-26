@@ -1,4 +1,4 @@
-import {UserAuthDb, SubscriptionDb,UserDb, UserTokenDb} from "../models";
+import {UserAuthDb, SubscriptionDb, UserDb, UserTokenDb, AttendanceDb} from "../models";
 import {
     BadRequestError,
     CreateSubscriptionRequest,
@@ -6,7 +6,7 @@ import {
     NotFoundError,
     UnAuthorizedError,
     User,
-    AdmingGoogleLogin, ChangePaymentStatusRequest, Subscription, ChangeSubscriptionStatusRequest
+    AdmingGoogleLogin, ChangePaymentStatusRequest, Subscription, ChangeSubscriptionStatusRequest, EditClockInRequest
 } from "../interfaces";
 import {config} from "../constants/settings";
 import {verifyGoogleToken} from "../helpers/google.helper";
@@ -157,4 +157,25 @@ export async function changeSubscriptionStatus(data:ChangeSubscriptionStatusRequ
 
     userSub.subscriptionStatus = subscriptionStatus
     await userSub.save()
+}
+
+export async function editClockIn(data:EditClockInRequest):Promise<void>{
+
+    const {userId,clockInTime,date,clockOutTime} = data
+    const startOfDay = new Date(date)
+    startOfDay.setHours(0, 0, 0, 0);
+    const endOfDay = new Date(date)
+    endOfDay.setHours(23, 59, 59, 999);
+
+
+
+
+    await AttendanceDb.updateOne({user:userId,date:{$gte:startOfDay,$lte:endOfDay}},{
+        clockInTime,
+        clockOutTime
+    })
+
+
+
+
 }
