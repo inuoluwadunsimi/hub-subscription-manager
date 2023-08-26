@@ -27,7 +27,7 @@ const AttendanceSchema = new Schema<Attendance>({
     },
     clockOutTime:{
         type:String,
-        required:true,
+        // required:true,
     }
 },{
     toObject: {

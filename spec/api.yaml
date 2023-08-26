@@ -356,6 +356,75 @@ paths:
                 schema:
                   $ref: '#/components/schemas/ErrorResponse'
 
+  /user/subscription/clock-in:
+    post:
+      tags:
+        - user
+        - subscription
+      operationId: clockIn
+      summary: 'user clock in'
+      parameters:
+        - $ref : '#/components/parameters/AuthToken'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/subscription/clock-out:
+    post:
+      tags:
+        - user
+        - subscription
+      operationId: clockIn
+      summary: 'user clock in'
+      parameters:
+        - $ref: '#/components/parameters/AuthToken'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /user/attendance:
+    get:
+      tags:
+        - user
+        - subscription
+      operationId: getClockInDays
+      summary: ' clock in period for a month and over a time'
+      parameters:
+        -  $ref: '#/components/parameters/AuthToken'
+      responses:
+        200:
+          description: 'success'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DefaultResponse'
+        400:
+          description: 'error'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 
 
 
@@ -368,19 +437,46 @@ components:
       in: path
       schema:
         type: string
+        format: uuid
       required: true
+
     DeviceID:
       name: x-device-id
       in: header
       schema:
         type: string
       required: true
+
+    StartDate:
+      name: startDate
+      in: query
+      schema:
+        type: string
+        format: date-time
+      required: false
+
+    EndDate:
+      name: endDate
+      in: query
+      schema:
+        type: string
+        format: date-time
+      required: false
+
+    Month:
+      name: month
+      in: query
+      schema:
+        type: string
+      required: false
+
     AuthToken:
       name: x-auth-token
       in: header
       schema:
         type: string
       required: true
+
   schemas:
     GoogleAuthSchema:
       type: object
@@ -394,6 +490,7 @@ components:
           enum:
             - user
             - admin
+
     TokenResponse:
       title: TokenResponse
       type: object
