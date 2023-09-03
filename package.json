@@ -2,7 +2,7 @@
   "devDependencies": {
     "@types/errorhandler": "1.5.0"
   },
-  "name": "Hub registration manager",
+  "name": "hub-registration-manager",
   "description": "A nodejs app ",
   "version": "1.0.0",
   "engines": {
