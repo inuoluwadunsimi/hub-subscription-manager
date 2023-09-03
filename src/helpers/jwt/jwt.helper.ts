@@ -53,7 +53,7 @@ export class JwtHelper {
             return jwt.sign({
                 email: body.email,
                 userId: body.userId,
-                deviceId: body.email,
+                deviceId: body.deviceId,
                 type: JwtType.ADMIN_USER
             }, encryptionKey, { expiresIn: 60 * 60 * 8 });
         }
@@ -62,7 +62,7 @@ export class JwtHelper {
 
     async verifyToken(token: string): Promise<GenerateTokenParam> {
         try {
-            const result = await jwt.verify(token, Buffer.from(this.configOption.privateKey, 'base64').toString());
+            const result =  jwt.verify(token, Buffer.from(this.configOption.privateKey, 'base64').toString());
             return result as GenerateTokenParam;
         } catch (error) {
             console.error(error);
@@ -75,22 +75,20 @@ export class JwtHelper {
 
     requirePermission(roleType: JwtType) {
         return async (req: IExpressRequest, res: Response, next: Function) => {
+
             let token = ''
             if(roleType === JwtType.ADMIN_USER) {
-                token = req.cookies['x-auth-token'];
+                token = <string>req.cookies['x-auth-token'];
             }else if(roleType === JwtType.NEW_USER || JwtType.USER){
                 token = <string> req.headers['x-auth-token']
             }
 
 
-            // if ((typeof token !== 'string') && roleType === JwtType.GUEST_OR_USER) {
-            //     return next();
-            // } else if (token && roleType === JwtType.GUEST_OR_USER) {
-            //     roleType = JwtType.USER;
-            // }
+
 
             if (!token) {
                 return this.respondError(res, 403, 'No API token');
+
             }
             try {
                 if (typeof token !== 'string') {
@@ -99,7 +97,7 @@ export class JwtHelper {
                 // Check if token is valid
                 // Check cache first
                 if (roleType === JwtType.USER  || roleType === JwtType.ADMIN_USER) {
-                    const cacheKey = `tickie_token:${token}`;
+                    const cacheKey = `capstone_token:${token}`;
                     const cachedToken = await this.configOption.redisClient.get(cacheKey);
                     if (!cachedToken) {
                         const dbToken = await this.UserTokenDb.findOne({ token });
@@ -110,6 +108,8 @@ export class JwtHelper {
                             await this.configOption.redisClient.expire(cacheKey, 60 * 60 * 24 * 7); // 7 days
                         }
                     }
+
+
                 }
 
                 const decoded = await this.verifyToken(token);
@@ -122,11 +122,15 @@ export class JwtHelper {
                 } else if (decoded.type === JwtType.NEW_USER) {
                     req.email = decoded.email;
                 } else {
+                    console.log('validaate jreejidije')
+
                     return this.respondError(res, 403, 'Invalid token');
                 }
                 return next();
 
             } catch (error: any) {
+                console.log(error)
+
                 return this.respondError(res, 403, error);
             }
         };

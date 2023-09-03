@@ -7,6 +7,7 @@ export async function handleAddUser(req:IExpressRequest,res:ExpressResponse):Pro
     const {email} = req.body
     try{
 
+
         await adminService.addUser(email)
         ResponseManager.success(res,{message:'signup mail sent to user'})
 
@@ -15,8 +16,6 @@ export async function handleAddUser(req:IExpressRequest,res:ExpressResponse):Pro
         ResponseManager.handleError(res,err)
 
     }
-
-
 
 }
 

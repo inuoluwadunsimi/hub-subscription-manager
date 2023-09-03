@@ -32,7 +32,7 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
   /admin/users:
     parameters:
-      - $ref: '#/components/parameters/AuthToken'
+      - $ref: '#/components/parameters/AdminAuthToken'
     post:
       summary: 'endpoint to add a new user'
       tags:
@@ -278,7 +278,7 @@ paths:
       operationId: createSubscription
       summary: 'endpoint to subscribe a user'
       parameters:
-        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/AdminAuthToken'
       requestBody:
         content:
           application/json:
@@ -298,7 +298,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
 
-  /admin/subscription/payment{userId}:
+  /admin/subscription/payment/{userId}:
     put:
       tags:
         - admin
@@ -306,7 +306,7 @@ paths:
       operationId: changePaymentStatus
       summary: 'endpoint to change a subscribers payment status'
       parameters:
-        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/AdminAuthToken'
         - $ref: '#/components/parameters/UserID'
       requestBody:
         content:
@@ -335,7 +335,7 @@ paths:
         operationId: changePaymentStatus
         summary: 'endpoint to change a subscribers payment status'
         parameters:
-          - $ref: '#/components/parameters/AuthToken'
+          - $ref: '#/components/parameters/AdminAuthToken'
           - $ref: '#/components/parameters/UserID'
         requestBody:
           content:
@@ -433,7 +433,7 @@ paths:
       operationId: editClockIndays
       summary: 'endpoint for admin to edit clock-in day'
       parameters:
-        - $ref: '#/components/parameters/AuthToken'
+        - $ref: '#/components/parameters/AdminAuthToken'
         - $ref: '#/components/parameters/UserID'
       requestBody:
         content:
@@ -506,6 +506,14 @@ components:
       schema:
         type: string
       required: true
+
+    AdminAuthToken:
+      name: x-auth-token
+      in: cookie
+      schema:
+        type: string
+      required: true
+
 
   schemas:
     GoogleAuthSchema:

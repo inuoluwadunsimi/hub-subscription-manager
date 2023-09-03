@@ -5,7 +5,6 @@ import adminRoutes from './admin'
 
 
 import { MainApiValidator } from '../middlewares/openapi.validator'
-import {handleEmailSignup} from "../controllers";
 
 const router: express.Router = express.Router();
 

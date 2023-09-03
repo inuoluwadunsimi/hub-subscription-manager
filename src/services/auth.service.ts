@@ -13,7 +13,7 @@ import {JwtHelper} from "../helpers/jwt/jwt.helper";
 import {redisClient} from "../helpers/redis.connector";
 import {config} from "../constants/settings";
 import {LoginRequest, SignupWithEmail, UserGoogleAuth, VeifyDeviceRequest,ForgotPasswordOtpRequest,ForgotPasswordOtpVerifyRequest,ResetPasswordRequest} from "../interfaces/auth/auth-requests";
-import {AuthResponse} from "../interfaces/auth/auth.responses";
+import {AuthResponse} from "../interfaces";
 import {verifyGoogleToken} from "../helpers/google.helper";
 import bcrypt from 'bcrypt'
 import {Mailer} from "../mailing/mail.service";

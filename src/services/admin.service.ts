@@ -1,12 +1,16 @@
-import {UserAuthDb, SubscriptionDb, UserDb, UserTokenDb, AttendanceDb} from "../models";
+import {AttendanceDb, SubscriptionDb, UserDb, UserTokenDb} from "../models";
 import {
+    AdmingGoogleLogin,
     BadRequestError,
+    ChangePaymentStatusRequest,
+    ChangeSubscriptionStatusRequest,
     CreateSubscriptionRequest,
+    EditClockInRequest,
     JwtType,
     NotFoundError,
+    Subscription,
     UnAuthorizedError,
-    User,
-    AdmingGoogleLogin, ChangePaymentStatusRequest, Subscription, ChangeSubscriptionStatusRequest, EditClockInRequest
+    User
 } from "../interfaces";
 import {config} from "../constants/settings";
 import {verifyGoogleToken} from "../helpers/google.helper";
@@ -86,6 +90,7 @@ export async function addUser(email:string):Promise<void>{
     * throw an error if the mail already exists */
     const exUser = await UserDb.findOne<User>({email})
     if(exUser){
+        console.log('user exists sha')
         throw new  BadRequestError('subscriber aleady exists')
     }
 
@@ -98,8 +103,7 @@ export async function addUser(email:string):Promise<void>{
 
 export async function getUsers():Promise<User[]>{
 
-    const users = await UserDb.find<User>({})
-    return users
+    return UserDb.find<User>({});
 
 }
 
@@ -140,6 +144,7 @@ export async function changePaymentStatus(data:ChangePaymentStatusRequest):Promi
     const {userId,paymentStatus} = data
     const userSub = await SubscriptionDb.findOne<Subscription>({user:userId})
     if(!userSub){
+        console.log('does it get here?')
         throw new NotFoundError('no subscription record for this user')
     }
 
@@ -151,6 +156,7 @@ export async function changePaymentStatus(data:ChangePaymentStatusRequest):Promi
 export async function changeSubscriptionStatus(data:ChangeSubscriptionStatusRequest):Promise<void>{
     const {userId,subscriptionStatus} = data
     const userSub = await SubscriptionDb.findOne<Subscription>({user:userId})
+
     if(!userSub){
         throw new NotFoundError('no subscription record for this user')
     }
