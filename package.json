@@ -3,7 +3,6 @@
     "@types/errorhandler": "1.5.0"
   },
   "name": "hub-registration-manager",
-  "type": "module",
   "description": "A nodejs app ",
   "version": "1.0.0",
   "engines": {
