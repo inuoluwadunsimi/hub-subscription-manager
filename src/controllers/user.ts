@@ -56,10 +56,12 @@ export async function handleClockOut(req:IExpressRequest,res:ExpressResponse):Pr
 
 export async function handleGetClockInDays(req:IExpressRequest,res:ExpressResponse):Promise<void>{
     const userId = req.userId!
+    const {startDate,endDate,month} = req.query
+
     try{
 
-        const {startDate,endDate,month} = req.query
-        await userService.getClockInDays({startDate:<string> startDate,endDate:<string>endDate,month:<string>month,userId})
+        const days = await userService.getClockInDays({startDate:<string> startDate,endDate:<string>endDate,month:<string>month,userId})
+        ResponseManager.success(res,{days})
 
     }catch (err:any){
         ResponseManager.handleError(res,err)

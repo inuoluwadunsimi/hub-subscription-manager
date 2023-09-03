@@ -1,12 +1,12 @@
 ///<reference path="../../../node_modules/@types/jest/index.d.ts"/>
 
 import {JwtHelper} from "../../helpers/jwt/jwt.helper";
-import {adminData, adminsData} from "../data/admin.data";
+import { adminsData} from "../data/admin.data";
 import {connectDBForTesting,dropAndDisconnectDBForTesting} from "../helpers/connect.db.for.testing";
 import request from 'supertest'
 import app from '../../app'
-import {userData, users} from "../data/user.data";
-import {JwtType, User} from "../../interfaces";
+import {userData} from "../data/user.data";
+import {JwtType} from "../../interfaces";
 import {faker} from "@faker-js/faker";
 import {redisClient} from "../../helpers/redis.connector";
 import {Mailer} from "../../mailing/mail.service";

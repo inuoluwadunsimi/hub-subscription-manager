@@ -9,16 +9,13 @@ export const userData ={
     authToken: faker.string.alphanumeric(32),
     forgotPasswordAuthToken:faker.string.alphanumeric(32),
     deviceId: faker.string.uuid(),
+    password:'ourOldPassword',
+    newPassword:'Ajibola123@@@@'
 
 }
 
 
-export const users = [{
-    id:faker.string.uuid(),
-    email:faker.internet.email(),
-    createdAt: faker.date.anytime(),
-    updatedAt:faker.date.anytime()
-
-
-}]
-
+export const mockAttendance ={
+    days:[],
+    count:0
+}

@@ -18,7 +18,7 @@ const router = express.Router()
 router.post('/change-password',jwtHelper.requirePermission(JwtType.USER),handleChangePassword)
 router.post('/subscription/clock-in',jwtHelper.requirePermission(JwtType.USER),handleClockIn)
 router.post('/subscription/clock-out',jwtHelper.requirePermission(JwtType.USER),handleClockOut)
-router.post('/attendance',jwtHelper.requirePermission(JwtType.USER),handleGetClockInDays)
+router.get('/attendance',jwtHelper.requirePermission(JwtType.USER),handleGetClockInDays)
 
 
 
