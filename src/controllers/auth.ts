@@ -115,6 +115,7 @@ export async function handleResetPassword(req: IExpressRequest, res: ExpressResp
     const deviceId = req.headers['x-device-id'];
     const {password} = req.body;
 
+    console.log(password)
     try {
         const token = await authService.ResetPassword({
             email,

@@ -13,5 +13,6 @@ export const adminsData ={
     authToken: faker.string.alphanumeric(32),
     forgotPasswordAuthToken:faker.string.alphanumeric(32),
     deviceId: faker.string.uuid(),
+    googleToken: faker.string.uuid()
 
 }

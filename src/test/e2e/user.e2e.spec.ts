@@ -5,7 +5,7 @@ import app from '../../app'
 import {JwtHelper} from "../../helpers/jwt/jwt.helper";
 import {faker} from "@faker-js/faker";
 import {JwtType} from "../../interfaces";
-import {mockAttendance, userData} from "../data/user.data";
+import { userData} from "../data/user.data";
 import request from "supertest";
 import {AttendanceDb, SubscriptionDb, UserAuthDb, UserTokenDb} from "../../models";
 import bcrypt from "bcrypt";

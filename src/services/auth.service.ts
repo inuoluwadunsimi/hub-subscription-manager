@@ -40,6 +40,7 @@ export async function userGoogleAuth(data:UserGoogleAuth):Promise<AuthResponse>{
     // check if the user has completed a previous signup
     const existingUserAuth = await UserAuthDb.findOne<UserAuth>({email})
 
+
     // if the user is already signup up, log them in instead
     if (existingUserAuth && existingUserAuth.type === AuthType.EMAIL) {
         throw new BadRequestError('Already signed up with email, login instead')
@@ -370,6 +371,7 @@ export async function ResetPassword(body: ResetPasswordRequest): Promise<AuthRes
     });
 
     if (!exUser) {
+        console.log('this is the where the error is coming from')
         throw new BadRequestError('user does not exist');
     }
 
@@ -379,7 +381,7 @@ export async function ResetPassword(body: ResetPasswordRequest): Promise<AuthRes
     const token = jwtHelper.generateToken({
         email,
         deviceId,
-        type: JwtType.USER,
+        type: JwtType.NEW_USER,
     });
     const user = await UserDb.findOne<User>({email})
 
